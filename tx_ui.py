@@ -1,24 +1,31 @@
 import serial
 import tkinter as tk
-from threading import Thread
+from tkinter import messagebox, scrolledtext
+import time
 
-PORT = "COM12"       # change to your Pico port
+# --- Configuration ---
+PORT = "COM13"        # change to your Pico port
 BAUD_RATE = 115200
 
-ser = serial.Serial(PORT, BAUD_RATE)
+try:
+    ser = serial.Serial(PORT, BAUD_RATE, timeout=1)
+    time.sleep(2)
+    print(f"✅ Connected to {PORT}")
+except serial.SerialException:
+    messagebox.showerror("Connection Error", f"Could not open {PORT}. Check connection or port name.")
+    exit()
 
 # --- Functions ---
-def read_from_pico():
-    buffer = ""
-    while True:
-        if ser.in_waiting > 0:
-            data = ser.read().decode(errors='ignore')
-            if data == "\n":
-                if buffer.strip():
-                    add_message("Pico", buffer.strip(), "gray")
-                buffer = ""
-            else:
-                buffer += data
+def send_message(event=None):
+    msg = entry.get().strip()
+    if not msg:
+        return
+    try:
+        ser.write((msg + "\n").encode())
+        add_message("You", msg, "green")
+        entry.delete(0, tk.END)
+    except Exception as e:
+        messagebox.showerror("Send Error", str(e))
 
 def add_message(sender, text, color):
     bubble = tk.Frame(chat_frame, bg=color, padx=10, pady=5)
@@ -32,24 +39,29 @@ def add_message(sender, text, color):
         justify="left",
     )
     msg_label.pack()
-    bubble.pack(anchor="w", pady=3, padx=10)
+    bubble.pack(anchor="e" if sender == "You" else "w", pady=3, padx=10)
     canvas.update_idletasks()
     canvas.yview_moveto(1)
 
-def start_reader():
-    thread = Thread(target=read_from_pico, daemon=True)
-    thread.start()
+def exit_program():
+    try:
+        ser.write(b"exit\n")
+        ser.close()
+    except:
+        pass
+    root.destroy()
 
 # --- UI Setup ---
 root = tk.Tk()
-root.title("Optical Chat - Receiver")
+root.title("Optical Chat - Transmitter")
 root.geometry("420x500")
 root.configure(bg="#101010")
 
-title = tk.Label(root, text="💬 Optical Chat - Pico", font=("Segoe UI", 14, "bold"),
+title = tk.Label(root, text="💬 Optical Chat - You", font=("Segoe UI", 14, "bold"),
                  bg="#202020", fg="white", pady=10)
 title.pack(fill=tk.X)
 
+# Scrollable chat area
 chat_frame_outer = tk.Frame(root, bg="#101010")
 chat_frame_outer.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
 
@@ -64,5 +76,20 @@ canvas.configure(yscrollcommand=scrollbar.set)
 canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-start_reader()
+# Entry + Send button
+entry_frame = tk.Frame(root, bg="#101010")
+entry_frame.pack(fill=tk.X, padx=10, pady=5)
+
+entry = tk.Entry(entry_frame, font=("Segoe UI", 12), bg="#181818", fg="white", insertbackground="white")
+entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 10))
+entry.bind("<Return>", send_message)
+
+send_btn = tk.Button(entry_frame, text="Send", bg="limegreen", fg="white",
+                     font=("Segoe UI", 11, "bold"), width=8, command=send_message)
+send_btn.pack(side=tk.RIGHT)
+
+exit_btn = tk.Button(root, text="Exit", bg="#ff5555", fg="white",
+                     font=("Segoe UI", 11, "bold"), command=exit_program)
+exit_btn.pack(pady=5)
+
 root.mainloop()
