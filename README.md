@@ -1,3 +1,5 @@
+---
+
 # LiFi-Based Data Transfer System
 
 This project demonstrates a simple light-based data communication system using **Raspberry Pi Pico** boards. Data is transmitted through visible light using a **laser diode** as the transmitter and an **LDR sensor** as the receiver. The system supports text message transfer between two computers through a light channel.
@@ -40,7 +42,7 @@ rx_ui.py   – Receiver PC interface
 
 ---
 
-## How It Works
+## Working Principle
 
 1. The transmitter Pico reads a message from the PC.
 2. Each character is converted to binary and sent as light pulses (ON/OFF).
@@ -69,6 +71,30 @@ rx_ui.py   – Receiver PC interface
    python rx_ui.py
    ```
 6. Type messages in the transmitter window to send data over light.
+
+---
+
+## Images and Outputs
+
+### Block Diagram of LiFi Based Data Transfer System
+
+![Block Diagram](images/block_diagram.png)
+
+### Receiver Side Output (In Raspberry Pi Pico)
+
+![Receiver Pico Output](images/rx_pi.png)
+
+### Receiver Side UI (In PC)
+
+![Receiver UI](images/rx_ui.png)
+
+### Transmitter Side Output (In Raspberry Pi Pico)
+
+![Transmitter Pico Output](images/tx_pi.jpg)
+
+### Transmitter Side UI (In PC)
+
+![Transmitter UI](images/tx_ui.jpg)
 
 ---
 
