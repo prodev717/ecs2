@@ -86,7 +86,9 @@ rx_ui.py   – Receiver PC interface
 
 ### Receiver Side UI (In PC)
 
-![Receiver UI](images/rx_ui.png)
+<div style="width:100%; height:30%; overflow:hidden;">
+  <img src="images/rx_ui.png" style="width:100%; margin-top:0;">
+</div>
 
 ### Transmitter Side Output (In Raspberry Pi Pico)
 
@@ -94,7 +96,9 @@ rx_ui.py   – Receiver PC interface
 
 ### Transmitter Side UI (In PC)
 
-![Transmitter UI](images/tx_ui.JPG)
+<div style="width:100%; height:30%; overflow:hidden;">
+  <img src="images/tx_ui.JPG" style="width:100%; margin-top:0;">
+</div>
 
 ---
 
