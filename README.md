@@ -90,11 +90,11 @@ rx_ui.py   – Receiver PC interface
 
 ### Transmitter Side Output (In Raspberry Pi Pico)
 
-![Transmitter Pico Output](images/tx_pi.jpg)
+![Transmitter Pico Output](images/tx_pi.JPG)
 
 ### Transmitter Side UI (In PC)
 
-![Transmitter UI](images/tx_ui.jpg)
+![Transmitter UI](images/tx_ui.JPG)
 
 ---
 
